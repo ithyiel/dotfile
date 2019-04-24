@@ -1,4 +1,4 @@
-;;
+;; File launching for frequency use
 
 (defvar file-map
   (let ((map '((("firefly") . ff)
@@ -7,7 +7,7 @@
 	       ((ansi-term "/bin/bash") . sh)
 	       (("firefox" "-P" "orig" "--no-remote") . ww)
 	       (("firefox" "-P" "u" "--no-remote") . wwu)
-	       (("firefox" "-P" "green" "--no-remote") . wwg)))
+	       (("firefox" "-P" "ff" "--no-remote") . wwf)))
 	(symbol-valid (lambda (arg)
 			(if (symbolp arg)
 			    (or (fboundp arg)
@@ -62,21 +62,6 @@
 	  (lambda ()
 	    (launch '(u dic))))
 
-(defun dict ()
-  (interactive)
-  (apply 'start-process
-	 '("stardict" nil "stardict")))
-
-(defun browser (profile)
-  (interactive)
-  (apply 'start-process
-	 `("firefox" nil "firefox" "-P" ,profile "-no-remote")))
-
-
 (global-set-key [?\C-,] 'buffer-menu)
-(global-set-key [M-up] (lambda () (interactive) (dict)))
-(global-set-key [M-down] (lambda () (interactive) (ansi-term "/bin/bash")))
-(global-set-key [M-right] (lambda () (interactive) (browser "n")))
-(global-set-key [M-left] (lambda () (interactive) (browser "u")))
 
 (provide 'firstfile)
