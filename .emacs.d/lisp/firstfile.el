@@ -1,11 +1,13 @@
 ;;
 
 (defvar file-map
-  (let ((map '((("firefly") . ag)
+  (let ((map '((("firefly") . ff)
+	       (("u") . u)
 	       (("stardict") . dic)
 	       ((ansi-term "/bin/bash") . sh)
-	       (("firefox" "-P" "n" "--no-remote") . ww)
-	       (("firefox" "-P" "u" "--no-remote") . wwa)))
+	       (("firefox" "-P" "orig" "--no-remote") . ww)
+	       (("firefox" "-P" "u" "--no-remote") . wwu)
+	       (("firefox" "-P" "green" "--no-remote") . wwg)))
 	(symbol-valid (lambda (arg)
 			(if (symbolp arg)
 			    (or (fboundp arg)
@@ -58,7 +60,7 @@
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
-	    (launch '(ag dic))))
+	    (launch '(u dic))))
 
 (defun dict ()
   (interactive)
