@@ -25,21 +25,23 @@
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt) 
 
 (custom-set-variables
- '(menu-bar-mode nil)
- '(tool-bar-mode nil)
- '(tooltip-mode nil)
- '(scroll-bar-mode nil)
+ '(column-number-mode t)
+ '(cua-mode t nil (cua-base))
+ '(default-input-method "chinese-py")
  '(display-battery-mode t)
  '(display-time-mode t)
  '(fringe-mode 0 nil (fringe))
+ '(menu-bar-mode nil)
+ '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
- '(column-number-mode t)
- '(cua-mode t nil (cua-base))
- '(default-input-method "chinese-py"))
+ '(tool-bar-mode nil)
+ '(tooltip-mode nil))
 
 (custom-set-faces
  '(default ((t (:family "Ubuntu Condensed" :foundry "DAMA" :slant normal :weight normal :height 128 :width normal))))
- '(fixed-pitch-serif ((t (:family "Ubuntu Condensed")))))
+ '(fixed-pitch ((t (:inherit default))))
+ '(fixed-pitch-serif ((t (:inherit default))))
+ '(variable-pitch ((t (:inherit default)))))
 
 (provide 'prefs)

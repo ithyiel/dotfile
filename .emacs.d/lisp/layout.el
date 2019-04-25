@@ -1,4 +1,4 @@
-;; layout for window, buffer
+;; layout
 
 (global-set-key [?\C-,] 'buffer-menu)
 (global-set-key [?\C-\;] 'kill-buffer)
