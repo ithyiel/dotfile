@@ -18,6 +18,7 @@
       display-time-interval 1)
 (setq user-full-name "ith yiel"
       user-mail-address "ithyiel@gmail.com")
+(setq source-directory (expand-file-name "source/emacs-26.2" (getenv "HOME")))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setenv "LC_CTYPE" "zh_CN.utf-8")
