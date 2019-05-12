@@ -3,6 +3,7 @@
 /.emacs.d/elpa
 /.emacs.d/elpa-*
 /.emacs.d/eshell
+/.emacs.d/recentf
 /.emacs.d/lisp/*~
 /.emacs.d/lisp/#*
 /.emacs.d/*~

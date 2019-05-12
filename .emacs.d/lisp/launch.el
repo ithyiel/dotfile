@@ -17,7 +17,7 @@
 			  (functionp arg)))))
    (mapc (lambda (arg)
 	    (let ((sym (cdr arg)) (any (caar arg)))
-	      (put sym 'symbol-association (funcall symbol-valid any))))
+	      (put sym 'bind-eval-form (funcall symbol-valid any))))
 	  map))
  "((program args) . alias)")
 
@@ -39,22 +39,24 @@
   (let ((input (read-string prompt)))
     (list (mapcar 'intern (split-string input)))))
 
-(defun launch (aliases &optional action)
-  (interactive (launch-interactive-args "launch: "))
-  (let ((exec-path (cons (expand-file-name "sh" (getenv "HOME")) exec-path))
-	(symbols aliases) symbol)
+(defun launch (alias &optional action)
+  (interactive (launch-interactive-args "alias: "))
+  (let ((exec-path (cons (expand-file-name "sh"
+					     (or home-directory
+						 (getenv "HOME")))
+			   exec-path))
+	(symbols alias) symbol)
     (while (prog1
 	       (and (setq symbol (pop symbols)) symbols)
 	     (let* ((pair (rassq symbol file-map))
 		    (key (cdr pair)) (value (car pair)))
 	       (catch 'done
-		 (and pair (consp value)
+		 (when (and pair (consp value))
 		      (let ((program (car value)) (args (cdr value)))
-			(if (get key 'symbol-association)
+			(if (get key 'bind-eval-form)
 			    (apply program args)
 			  (and (executable-find program)
-			       (apply 'start-process
-				      program nil program args)))
+			       (apply 'start-process program nil program args)))
 			(throw 'done t)))
 		 (message "No assocation matching symbol %s" symbol)))))))
 

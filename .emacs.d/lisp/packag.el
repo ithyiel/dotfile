@@ -1,4 +1,4 @@
-;; package
+;; Package initialize
 
 (package-initialize)
 

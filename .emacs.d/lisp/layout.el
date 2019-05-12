@@ -1,4 +1,4 @@
-;; layout
+;; Layout
 
 (global-set-key [?\C-o] 'find-file)
 (global-set-key [?\C-,] 'buffer-menu)

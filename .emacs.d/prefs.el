@@ -1,4 +1,4 @@
-;; prefs
+;; Prefs
 
 (setq frame-resize-pixelwise t
       initial-frame-alist '((fullscreen . maximized))
@@ -18,7 +18,8 @@
       display-time-interval 1)
 (setq user-full-name "ith yiel"
       user-mail-address "ithyiel@gmail.com")
-(setq source-directory (expand-file-name "source/emacs-26.2" (getenv "HOME")))
+(setq home-directory (getenv "HOME")
+      source-directory (expand-file-name "source/emacs-26.2" home-directory))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setenv "LC_CTYPE" "zh_CN.utf-8")
@@ -32,15 +33,15 @@
  '(display-battery-mode t)
  '(display-time-mode t)
  '(fringe-mode 0 nil (fringe))
- '(menu-bar-mode nil)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
+ '(menu-bar-mode nil)
  '(tool-bar-mode nil)
  '(tooltip-mode nil))
 
 (custom-set-faces
- '(default ((t (:family "Ubuntu Condensed" :foundry "DAMA" :slant normal :weight normal :height 128 :width normal))))
+ '(default ((t (:inherit nil :slant normal :weight normal :height 120 :width normal :foundry "UKWN" :family "Cuprum"))))
  '(fixed-pitch ((t (:inherit default))))
  '(fixed-pitch-serif ((t (:inherit default))))
  '(variable-pitch ((t (:inherit default)))))

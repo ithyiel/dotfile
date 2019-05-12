@@ -1,4 +1,4 @@
-;; boot strap
+;; Boot strap
 
 (setq debug-on-error t)
 
@@ -6,6 +6,7 @@
 
 (require 'packag)
 (progn (require 'key-chord) (key-chord-mode t))
+(require 'eval-source)
 (require 'layout)
 (require 'launch)
 
