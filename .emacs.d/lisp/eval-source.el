@@ -28,7 +28,7 @@ Each has form of (REGEXP . MODE).")
 	      (push name files))))))
     (setq source-list (nreverse files))))
 
-(filter-source-list)
+;; (filter-source-list)
 
 ;; buffer-file-name
 ;; "/home/iy/.emacs.d/lisp/eval-easy.el"
