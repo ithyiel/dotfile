@@ -6,7 +6,7 @@
 
 (require 'packag)
 (progn (require 'key-chord) (key-chord-mode t))
-(require 'eval-source)
+(require 'evalin)
 (require 'layout)
 (require 'launch)
 
