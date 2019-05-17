@@ -4,18 +4,31 @@
 
 (defvar source-list nil)
 (defvar buffer-select nil)
+(defvar buffer-select-max 5)
 
 (defvar source-mode-alist
   '(("\\.c\\'" . c-mode)
     ("\\.h\\'" . c-mode)
     ("\\.py\\'" . python-mode)
     ("\\.el\\'" . elisp-mode))
-  "(REGEXP . MAJOR-MODE).")
+  "(REGEXP . MAJOR-MODE)")
 
 (defun select-buffer ()
-  (interactive))
+  (interactive)
+  (if (>= (length buffer-select) buffer-select-max)
+      (message "Out of range, %s, %d" buffer-select (length buffer-select))
+    (let ((buffer (current-buffer)))
+      (and (not (member buffer buffer-select))
+	   (push buffer buffer-select)))))
+
+(key-chord-define-global [?\;?s] 'select-buffer)
 
 (defun filter-source-list (&optional buffer-select)
+  (pcase buffer-select
+    ((guard (nlistp buffer-select))
+     (error "Invalid arg type, %s" buffer-select))
+    ((guard (> (length buffer-select) buffer-select-max))
+     (error "Arg out of range, %d" (length buffer-select))))
   (let (files)
     (dolist (buffer (or buffer-select (buffer-list)))
       (when (buffer-live-p buffer)
@@ -31,12 +44,14 @@
 	      (push name files))))))
     (setq source-list (nreverse files))))
 
-(filter-source-list)
-("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-("terminal.c" "evalin.el" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
+;; (filter-source-list)
+;; ("evalin.el" "lisp.h" "launch.el")
+;; ("evalin.el" "launch.el")
+;; ("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
+;; ("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
+;; ("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
+;; ("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
+;; ("terminal.c" "evalin.el" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
 
 ;; (abbreviate-file-name buffer-file-name)
 ;; "~/.emacs.d/lisp/evalin.el"

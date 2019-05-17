@@ -19,10 +19,9 @@
 	    (let ((sym (cdr arg)) (any (caar arg)))
 	      (put sym 'bind-eval-form (funcall symbol-valid any))))
 	  map))
- "((program args) . alias)")
+ "((PROGRAM ARGS) . ALIAS)")
 
 (defun kill-system-process (&rest args)
-  "Kill system-wide process."
   (declare (obsolete "temporarily obsoleted." 26.1))
   (interactive)
   (let ((pids (list-system-processes))
@@ -41,6 +40,8 @@
 
 (defun launch (alias &optional action)
   (interactive (launch-interactive-args "alias: "))
+  (unless (called-interactively-p 'interactive)
+    (if (nlistp alias) (error "Invalid arg type, %S" alias)))
   (let ((exec-path (cons (expand-file-name "sh"
 					     (or home-directory
 						 (getenv "HOME")))
@@ -58,12 +59,12 @@
 			  (and (executable-find program)
 			       (apply 'start-process program nil program args)))
 			(throw 'done t)))
-		 (message "No assocation matching symbol %s" symbol)))))))
+		 (message "No assocation matching symbol, %S" symbol)))))))
+
+(key-chord-define-global [?,?l] 'launch)
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (launch '(u dic))))
-
-(key-chord-define-global [?,?l] 'launch)
 
 (provide 'launch)

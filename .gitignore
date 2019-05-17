@@ -4,6 +4,7 @@
 /.emacs.d/elpa-*
 /.emacs.d/eshell
 /.emacs.d/recentf
+/.emacs.d/tramp
 /.emacs.d/lisp/*~
 /.emacs.d/lisp/#*
 /.emacs.d/*~
