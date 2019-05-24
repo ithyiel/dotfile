@@ -47,12 +47,12 @@
        (append map (list
 		    (let* ((this-key (elt key 0))
 			   (rest-key (seq-drop key 1))
-			   (map-smap (smap-get-map map this-key)))
-		      (if (null map-smap)
+			   (this-map (smap-get-map map this-key)))
+		      (if (null this-map)
 			  (cons this-key
 				(if (> (length rest-key) 0)
-				    (let ((this-map (make-source-map)))
-				      (smap-map this-map rest-key bind))
+				    (let ((map (make-source-map)))
+				      (smap-map map rest-key bind))
 				  bind))
 			ELSE))))))
 
