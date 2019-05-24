@@ -2,7 +2,7 @@
 
 (require 'compile)
 
-(defvar source-list nil)
+(defvar source-map nil)
 (defvar buffer-select nil)
 (defvar buffer-select-max 5)
 
@@ -23,54 +23,76 @@
 
 (key-chord-define-global [?\;?s] 'select-buffer)
 
-(defun filter-source-list (&optional buffer-select)
-  (pcase buffer-select
-    ((guard (nlistp buffer-select))
-     (error "Invalid arg type, %s" buffer-select))
-    ((guard (> (length buffer-select) buffer-select-max))
-     (error "Arg out of range, %d" (length buffer-select))))
-  (let (files)
+(defun make-source-map (&optional string)
+  (if string (list 'smap string) (list 'smap)))
+
+(defun smapp (object)
+  (if (and (consp object) (listp (cdr object)) (eq (car object) 'smap)) t nil))
+
+(defun smap-get-map (map key &optional testfn)
+  (let (return)
+    (and (smapp map)
+	 (setq return
+	       (let ((tail (cdr map)))
+		 (catch 'done
+		   (while (consp tail)
+		     (and (consp (car tail))
+			  (let* ((this-map (car tail)) (this-key (car this-map)))
+			    (if (funcall (or testfn 'eq) this-key key) (throw 'done this-map))))
+		     (setq tail (cdr tail)))))))
+    return))
+
+(defun smap-map (map key bind)
+  (and (smapp map)
+       (append map (list
+		    (let* ((this-key (elt key 0))
+			   (rest-key (seq-drop key 1))
+			   (map-smap (smap-get-map map this-key)))
+		      (if (null map-smap)
+			  (cons this-key
+				(if (> (length rest-key) 0)
+				    (let ((this-map (make-source-map)))
+				      (smap-map this-map rest-key bind))
+				  bind))
+			ELSE))))))
+
+(defmacro define-source (map key bind)
+  `(let ((let-map (smap-map ,map ,key ,bind)))
+     (and let-map (setq map let-map) ,bind)))
+
+(defun filter-source-map (&optional buffer-select)
+  (when buffer-select
+    (if (not (consp buffer-select))
+      (error "Invalid arg type, %s" buffer-select))
+    (if (> (length buffer-select) buffer-select-max)
+      (error "Arg out of range, %d" (length buffer-select))))
+  (let ((smap (make-source-map)))
     (dolist (buffer (or buffer-select (buffer-list)))
       (when (buffer-live-p buffer)
 	(with-current-buffer buffer
 	  (let ((name (buffer-name))
-		(file buffer-file-name))
+		(file buffer-file-name)
+		(mode major-mode))
 	    (when (and (not (string-match-p "\\` " name))
 		       (not buffer-read-only)
 		       (and file
 			    (file-readable-p file)
 			    (file-writable-p file)
-			    (file-regular-p file)))
-	      (push name files))))))
-    (setq source-list (nreverse files))))
+			    (file-regular-p file)
+			    (not (file-directory-p file))))
+	      ;; (push name files)
+	      )))))
+    ;; (setq source-map (nreverse files))
+    ))
 
-;; (filter-source-list)
+;; (filter-source-map)
+;; ("evalin.el" "frame.c" "launch.el")
 ;; ("evalin.el" "lisp.h" "launch.el")
-;; ("evalin.el" "launch.el")
 ;; ("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-;; ("evalin.el" "frame.c" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-;; ("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-;; ("evalin.el" "terminal.c" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
 ;; ("terminal.c" "evalin.el" "keymap.h" "keymap.c" "lread.c" "lisp.h" "launch.el" "layout.el")
-
-;; (abbreviate-file-name buffer-file-name)
-;; "~/.emacs.d/lisp/evalin.el"
-;; (abbreviate-file-name default-directory)
-;; "~/.emacs.d/lisp/"
-;; (buffer-name)
-;; "evalin.el"
-
-;; (cond
-;;  ((eq major-mode 'emacs-lisp-mode) BODY)
-;;  ((eq major-mode 'c-mode) BODY)
-;;  ((eq major-mode 'python-mode) BODY)
-;;  (t BODY))
 
 ;; (apply 'compile
 ;;        (list "gcc -o lisp lisp.c"))
-
-;; (buffer-list)
-;; (#<buffer eval-source.el> #<buffer  *Minibuf-1*> #<buffer *Help*> #<buffer *Buffer List*> #<buffer buff-menu.el.gz> #<buffer *scratch*> #<buffer *ansi-term*> #<buffer  *Minibuf-2*> #<buffer files.el.gz> #<buffer cc-mode.el.gz> #<buffer lisp.h> #<buffer compile.el.gz> #<buffer *Messages*> #<buffer lread.c> #<buffer  *Minibuf-0*> #<buffer  *code-conversion-work*> #<buffer  *server*> #<buffer  *Echo Area 0*> #<buffer  *Echo Area 1*> #<buffer  *DOC*> #<buffer *Backtrace*> #<buffer *Completions*>)
 
 ;; (defvar gcc-option nil
 ;;   "GCC option

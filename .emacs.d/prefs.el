@@ -3,15 +3,14 @@
 (setq frame-resize-pixelwise t
       initial-frame-alist '((fullscreen . maximized))
       inhibit-startup-screen t)
-(setq-default major-mode 'text-mode)
 (setq initial-buffer-choice nil)
-(setq auto-image-file-mode t)
+(setq-default major-mode 'text-mode)
 (setq visible-bell t)
 (setq make-backup-files nil)
+(setq auto-image-file-mode t)
 (setq tab-width 4
       tab-stop-list()
-      indent-tabs-mode nil
-      c-basic-offset 4)
+      indent-tabs-mode nil)
 (setq display-time-day-and-date t
       display-time-24hr-format t
       display-time-format "%d %m %Y %H:%M:%S"
@@ -27,18 +26,18 @@
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt) 
 
 (custom-set-variables
- '(column-number-mode t)
- '(cua-mode t nil (cua-base))
- '(default-input-method "chinese-py")
- '(display-battery-mode t)
- '(display-time-mode t)
- '(fringe-mode 0 nil (fringe))
- '(scroll-bar-mode nil)
- '(show-paren-mode t)
- '(size-indication-mode t)
  '(menu-bar-mode nil)
  '(tool-bar-mode nil)
- '(tooltip-mode nil))
+ '(tooltip-mode nil)
+ '(fringe-mode 0 nil (fringe))
+ '(scroll-bar-mode nil)
+ '(column-number-mode t)
+ '(display-battery-mode t)
+ '(display-time-mode t)
+ '(show-paren-mode t)
+ '(cua-mode t nil (cua-base))
+ '(size-indication-mode t)
+ '(default-input-method "chinese-py"))
 
 (custom-set-faces
  '(default ((t (:inherit nil :slant normal :weight normal :height 120 :width normal :foundry "UKWN" :family "Cuprum"))))
