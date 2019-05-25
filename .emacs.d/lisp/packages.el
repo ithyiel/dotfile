@@ -2,4 +2,4 @@
 
 (package-initialize)
 
-(provide 'packag)
+(provide 'packages)

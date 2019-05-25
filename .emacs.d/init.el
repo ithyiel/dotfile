@@ -4,9 +4,10 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(require 'packag)
+(require 'packages)
 (progn (require 'key-chord) (key-chord-mode t))
-(require 'evalin)
+(require 'maps)
+(require 'evals)
 (require 'layout)
 (require 'launch)
 

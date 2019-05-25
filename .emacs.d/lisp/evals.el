@@ -1,6 +1,6 @@
 ;; Evaluate source
 
-(require 'compile)
+(require 'maps)
 
 (defvar source-map nil)
 (defvar buffer-select nil)
@@ -22,43 +22,6 @@
 	   (push buffer buffer-select)))))
 
 (key-chord-define-global [?\;?s] 'select-buffer)
-
-(defun make-source-map (&optional string)
-  (if string (list 'smap string) (list 'smap)))
-
-(defun smapp (object)
-  (if (and (consp object) (listp (cdr object)) (eq (car object) 'smap)) t nil))
-
-(defun smap-get-map (map key &optional testfn)
-  (let (return)
-    (and (smapp map)
-	 (setq return
-	       (let ((tail (cdr map)))
-		 (catch 'done
-		   (while (consp tail)
-		     (and (consp (car tail))
-			  (let* ((this-map (car tail)) (this-key (car this-map)))
-			    (if (funcall (or testfn 'eq) this-key key) (throw 'done this-map))))
-		     (setq tail (cdr tail)))))))
-    return))
-
-(defun smap-map (map key bind)
-  (and (smapp map)
-       (append map (list
-		    (let* ((this-key (elt key 0))
-			   (rest-key (seq-drop key 1))
-			   (this-map (smap-get-map map this-key)))
-		      (if (null this-map)
-			  (cons this-key
-				(if (> (length rest-key) 0)
-				    (let ((map (make-source-map)))
-				      (smap-map map rest-key bind))
-				  bind))
-			ELSE))))))
-
-(defmacro define-source (map key bind)
-  `(let ((let-map (smap-map ,map ,key ,bind)))
-     (and let-map (setq map let-map) ,bind)))
 
 (defun filter-source-map (&optional buffer-select)
   (when buffer-select
@@ -122,4 +85,4 @@
 ;;     gcc src/source.c -o bin/source
 ;;     gcc src/source1.c src/source2.c -o bin/source")
 
-(provide 'evalin)
+(provide 'evals)
