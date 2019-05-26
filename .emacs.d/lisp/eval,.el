@@ -1,6 +1,6 @@
 ;; Evaluate source
 
-(require 'maps)
+(require 'map\,)
 
 (defvar source-map nil)
 (defvar buffer-select nil)
@@ -85,4 +85,4 @@
 ;;     gcc src/source.c -o bin/source
 ;;     gcc src/source1.c src/source2.c -o bin/source")
 
-(provide 'evals)
+(provide 'eval\,)
