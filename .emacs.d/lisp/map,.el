@@ -49,17 +49,24 @@
 
 (defun map-map (map type key bind)
   (and (map? map type)
-       (append map (list
-		    (let* ((this-key (elt key 0))
-			   (rest-key (seq-drop key 1))
-			   (this-map (map-get map type this-key)))
-		      (if (null this-map)
+       (let* ((this-key (elt key 0))
+	      (rest-key (seq-drop key 1))
+	      (this-map (map-get map type this-key)))
+	 (if (null this-map)
+	     (append map (list
 			  (cons this-key
 				(if (> (length rest-key) 0)
 				    (let ((map (make-map type)))
 				      (map-map map type rest-key bind))
-				  bind))
-			ELSE))))))
+				  bind))))
+	   (let* ((map-type (car map))
+		 (this-map-before (map-get-before map map-type this-key))
+		 (this-map (cons this-key
+				 (if (> (length rest-key) 0)
+				     (map-map (cdr this-map) map-type rest-key bind)
+				   bind)))
+		 (this-map-after (map-get-after map map-type this-key)))
+	     (append (list map-type) this-map-before (list this-map) this-map-after))))))
 
 (defmacro define-map (map type key bind)
   `(let ((let-map (map-map ,map ,type ,key ,bind)))
