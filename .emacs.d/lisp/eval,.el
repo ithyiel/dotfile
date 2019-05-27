@@ -13,6 +13,12 @@
     ("\\.el\\'" . elisp-mode))
   "(REGEXP . MAJOR-MODE)")
 
+(defmacro make-sourcemap (&optional bind)
+  `(make-map 'smap ,bind))
+
+(defmacro define-sourcemap (map key bind)
+  `(define-map ,map 'smap ,key ,bind))
+
 (defun select-buffer ()
   (interactive)
   (if (>= (length buffer-select) buffer-select-max)
