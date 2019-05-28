@@ -70,6 +70,6 @@
 
 (defmacro define-map (map type key bind)
   `(let ((let-map (map-map ,map ,type ,key ,bind)))
-     (and let-map (setq map let-map) ,bind)))
+     (and let-map (setq ,map let-map) ,bind)))
 
 (provide 'map\,)
