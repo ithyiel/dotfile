@@ -60,12 +60,18 @@
 				      (map-map map type rest-key bind))
 				  bind))))
 	   (let* ((map-type (car map))
-		 (this-map-before (map-get-before map map-type this-key))
-		 (this-map (cons this-key
-				 (if (> (length rest-key) 0)
-				     (map-map (cdr this-map) map-type rest-key bind)
-				   bind)))
-		 (this-map-after (map-get-after map map-type this-key)))
+		  (this-map-before (map-get-before map map-type this-key))
+		  (this-map (cons this-key
+				  (if (> (length rest-key) 0)
+				      (map-map (let* ((this-map-bind (cdr this-map))
+						      (map (if (and (consp this-map-bind)
+								    (map? this-map-bind (car this-map-bind)))
+							       this-map-bind
+							     (make-map map-type))))
+						 map)
+					       map-type rest-key bind)
+				    bind)))
+		  (this-map-after (map-get-after map map-type this-key)))
 	     (append (list map-type) this-map-before (list this-map) this-map-after))))))
 
 (defmacro define-map (map type key bind)
