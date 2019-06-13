@@ -18,7 +18,7 @@
 (setq user-full-name "ith yiel"
       user-mail-address "ithyiel@gmail.com")
 (setq home-directory (getenv "HOME")
-      source-directory (expand-file-name "source/emacs-26.2" home-directory))
+      source-directory (expand-file-name "source/emacs" home-directory))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setenv "LC_CTYPE" "zh_CN.utf-8")
@@ -26,21 +26,22 @@
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt) 
 
 (custom-set-variables
- '(menu-bar-mode nil)
- '(tool-bar-mode nil)
- '(tooltip-mode nil)
- '(fringe-mode 0 nil (fringe))
- '(scroll-bar-mode nil)
+ '(blink-cursor-mode t)
  '(column-number-mode t)
+ '(cua-mode t nil (cua-base))
+ '(default-input-method "chinese-py")
  '(display-battery-mode t)
  '(display-time-mode t)
+ '(fringe-mode 0 nil (fringe))
+ '(menu-bar-mode nil)
+ '(scroll-bar-mode nil)
  '(show-paren-mode t)
- '(cua-mode t nil (cua-base))
  '(size-indication-mode t)
- '(default-input-method "chinese-py"))
+ '(tool-bar-mode nil)
+ '(tooltip-mode nil))
 
 (custom-set-faces
- '(default ((t (:inherit nil :slant normal :weight normal :height 120 :width normal :foundry "UKWN" :family "Cuprum"))))
+ '(default ((t (:inherit nil :slant normal :weight normal :height 128 :width normal :foundry "PYRS" :family "Dosis"))))
  '(fixed-pitch ((t (:inherit default))))
  '(fixed-pitch-serif ((t (:inherit default))))
  '(variable-pitch ((t (:inherit default)))))

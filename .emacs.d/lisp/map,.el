@@ -1,12 +1,28 @@
 ;; map type
 
-(defun make-map (type &optional bind)
-  (and (symbolp type)
-       (if bind (list type bind) (list type))))
+(defun make-map (type)
+  (if (symbolp type)
+      (progn
+	(if (and (not (eq type 'map))
+		 (not (map-type? type)))
+	    (push type map-built))
+	(list type))))
 
-(defun map? (map type)
+(defvar map-built (make-map 'map))
+
+(defun map-type? (type)
+  (if (symbolp type)
+      (or (eq type 'map)
+	  (let ((tail (cdr map-built)) return)
+	    (for-each-tail (per tail return)
+	      (if (eq type per)  (setq return t)))))))
+
+(defun map? (map &optional type)
   (and (listp map) (listp (cdr map))
-       (and (symbolp type) (eq type (car map)))))
+       (if type
+	   (eq type (car map))
+	 (or (eq (car map) 'map)
+	     (map-type? (car map))))))
 
 (defun map-get (map type key &optional test?)
   (let (return)
@@ -74,8 +90,56 @@
 		  (this-map-after (map-get-after map map-type this-key)))
 	     (append (list map-type) this-map-before (list this-map) this-map-after))))))
 
+(defun set-map-inherit (map inherit)
+  (if (and inherit (map? inherit))
+      (progn
+	(if (map-member? inherit map)
+	    (error "Cycles map inheritance"))
+
+	;; fix check for existence and set inherit
+	(if (map-member? map inherit)
+	    )
+	)))
+  
+;; (defun unset-map-inherit (map inherit)
+;;   )
+
+(defun purge (elt seq &optional test?)
+  ;; fix object for vector, string other than list
+  (let ((tail seq) prev)
+    (for-each-tail (per tail)
+      (if (funcall (or test? 'eq)  (car tail) elt)
+	  (setf (if prev (cdr prev) seq) (cdr tail))
+	(setq prev tail)))
+    seq))
+
+(defun map-member? (map member)
+  (let ((tail (cdr map)) return)
+    (for-each-tail (per tail return)
+      (if (eq member per) (setq return t)))))
+
+(defmacro for-each-tail (spec &rest body)
+  (declare (indent 1) (debug ((symbolp form &optional form) body)))
+  (unless (consp spec)
+    (signal 'wrong-type-argument `(consp ,spec)))
+  (unless (<= 2 (length spec) 3)
+    (signal 'wrong-number-of-arguments `(,spec ,(length spec))))
+  ;; fix lexical binding
+  `(let ((tail ,(nth 1 spec))
+	 (,(car spec)))
+     (while
+	 ;; fix function-object predicate on return
+	 ,(if (cdr (cdr spec))
+	      `(and (consp tail) (null ,@(cdr (cdr spec))))
+	    `(consp tail))
+       (setq ,(car spec) (car tail))
+       ,@body
+       (setq tail (cdr tail)))
+     ,@(if (cdr (cdr spec)) (cdr (cdr spec)))))
+
 (defmacro define-map (map type key bind)
-  `(let ((let-map (map-map ,map ,type ,key ,bind)))
-     (and let-map (setq ,map let-map) ,bind)))
+  (declare (indent 0))
+  `(let ((macro-map (map-map ,map ,type ,key ,bind)))
+     (and macro-map (setq ,map macro-map) ,bind)))
 
 (provide 'map\,)

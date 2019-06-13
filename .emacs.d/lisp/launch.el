@@ -65,6 +65,6 @@
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
-	    (launch '(u dic))))
+	    (launch '(u ff dic))))
 
 (provide 'launch)

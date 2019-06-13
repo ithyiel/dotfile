@@ -35,7 +35,7 @@
       (error "Invalid arg type, %s" buffer-select))
     (if (> (length buffer-select) buffer-select-max)
       (error "Arg out of range, %d" (length buffer-select))))
-  (let ((smap (make-source-map)))
+  (let ((smap (make-sourcemap)))
     (dolist (buffer (or buffer-select (buffer-list)))
       (when (buffer-live-p buffer)
 	(with-current-buffer buffer
