@@ -5,6 +5,7 @@
       (progn
 	(if (and (not (eq type 'map))
 		 (not (map-type? type)))
+	    ;; fix map ops
 	    (push type map-built))
 	(list type))))
 
@@ -15,12 +16,12 @@
       (or (eq type 'map)
 	  (let ((tail (cdr map-built)) return)
 	    (for-each-tail (per tail return)
-	      (if (eq type per)  (setq return t)))))))
+	      (if (eq per type)  (setq return t)))))))
 
 (defun map? (map &optional type)
   (and (listp map) (listp (cdr map))
        (if type
-	   (eq type (car map))
+	   (eq (car map) type)
 	 (or (eq (car map) 'map)
 	     (map-type? (car map))))))
 
@@ -91,32 +92,34 @@
 	     (append (list map-type) this-map-before (list this-map) this-map-after))))))
 
 (defun set-map-inherit (map inherit)
-  (if (and inherit (map? inherit))
-      (progn
-	(if (map-member? inherit map)
-	    (error "Cycles map inheritance"))
+  (if (map? map)
+      (cond
+       (inherit
+	(if (map? inherit)
+	    (progn
+	      (if (map-member? map inherit)
+		  (error "Cycles map inheritance"))
+	      (let ((member (map-member? inherit map)))
+		(if member (pop-refs member)))
+	      (setf (cdr (last map)) (list inherit)))))
+       ((null inherit)
+	;; fix inherit nil
+	))))
 
-	;; fix check for existence and set inherit
-	(if (map-member? map inherit)
-	    )
-	)))
-  
 ;; (defun unset-map-inherit (map inherit)
 ;;   )
 
-(defun purge (elt seq &optional test?)
-  ;; fix object for vector, string other than list
-  (let ((tail seq) prev)
-    (for-each-tail (per tail)
-      (if (funcall (or test? 'eq)  (car tail) elt)
-	  (setf (if prev (cdr prev) seq) (cdr tail))
-	(setq prev tail)))
-    seq))
-
-(defun map-member? (map member)
+(defun map-member? (member map)
   (let ((tail (cdr map)) return)
     (for-each-tail (per tail return)
-      (if (eq member per) (setq return t)))))
+      (if (eq per member) (setq return tail)))))
+
+(defmacro pop-refs (place)
+  (declare (debug t))
+  `(car-safe
+    (prog1 (copy-sequence ,place)
+      (setf (car ,place) (car (cdr ,place))
+	    (cdr ,place) (cdr (cdr ,place))))))
 
 (defmacro for-each-tail (spec &rest body)
   (declare (indent 1) (debug ((symbolp form &optional form) body)))
@@ -138,7 +141,7 @@
      ,@(if (cdr (cdr spec)) (cdr (cdr spec)))))
 
 (defmacro define-map (map type key bind)
-  (declare (indent 0))
+  (declare (debug t))
   `(let ((macro-map (map-map ,map ,type ,key ,bind)))
      (and macro-map (setq ,map macro-map) ,bind)))
 
