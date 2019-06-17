@@ -3,10 +3,9 @@
 (defun make-map (type)
   (if (symbolp type)
       (progn
-	(if (and (not (eq type 'map))
-		 (not (map-type? type)))
-	    ;; fix map ops
-	    (push type map-built))
+	(if (and (not (eq type 'map)) (not (map-type? type)))
+	    (or (and (null (cdr map-built)) (setf (cdr map-built) (list type)))
+		(push-refs type (cdr map-built))))
 	(list type))))
 
 (defvar map-built (make-map 'map))
@@ -20,8 +19,7 @@
 
 (defun map? (map &optional type)
   (and (listp map) (listp (cdr map))
-       (if type
-	   (eq (car map) type)
+       (if type (eq (car map) type)
 	 (or (eq (car map) 'map)
 	     (map-type? (car map))))))
 
@@ -113,6 +111,13 @@
   (let ((tail (cdr map)) return)
     (for-each-tail (per tail return)
       (if (eq per member) (setq return tail)))))
+
+(defmacro push-refs (elt place)
+  (declare (debug t))
+  `(car-safe
+   (prog1 ,place
+     (setf (cdr ,place) (cons (car ,place) (cdr ,place))
+	   (car ,place) ,elt))))
 
 (defmacro pop-refs (place)
   (declare (debug t))
