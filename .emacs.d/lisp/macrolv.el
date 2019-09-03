@@ -3,16 +3,19 @@
 (require 'macroexp)
 (require 'gv)
 
-;; fix pred
 (defmacro push-ref (elt place)
   (declare (debug (form gv-place)))
   (let ((xcar `(car ,place)) (xcdr `(cdr ,place)))
-    `(progn
-       ,(gv-letplace (_getter setter) xcdr
-	  (funcall setter `(cons ,xcar ,xcdr)))
-       ,(macroexp-let2 macroexp-copyable-p v elt
-	  (gv-letplace (_getter setter) xcar
-	    (funcall setter v))))))
+    `(if (null ,place)
+	 ,(if (symbolp place)
+	      (gv-letplace (getter setter) place
+		(funcall setter `(cons ,elt ,getter))))
+       (prog1 ,place
+	 ,(gv-letplace (_getter setter) xcdr
+	    (funcall setter `(cons ,xcar ,xcdr)))
+	 ,(macroexp-let2 macroexp-copyable-p v elt
+	    (gv-letplace (_getter setter) xcar
+	      (funcall setter v)))))))
 
 (defmacro pop-ref (place)
   (declare (debug (form gv-place)))
