@@ -1,4 +1,4 @@
-;; Prefs
+;; Pref
 
 (setq frame-resize-pixelwise t
       initial-frame-alist '((fullscreen . maximized))
@@ -33,17 +33,17 @@
  '(display-battery-mode t)
  '(display-time-mode t)
  '(fringe-mode 0 nil (fringe))
- '(menu-bar-mode nil)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
+ '(menu-bar-mode nil)
  '(tool-bar-mode nil)
  '(tooltip-mode nil))
 
 (custom-set-faces
- '(default ((t (:inherit nil :slant normal :weight normal :height 128 :width normal :foundry "PYRS" :family "Dosis"))))
+ '(default ((t (:inherit nil :slant normal :weight normal :height 113 :width normal :foundry "Mono" :family "Arial"))))
  '(fixed-pitch ((t (:inherit default))))
  '(fixed-pitch-serif ((t (:inherit default))))
  '(variable-pitch ((t (:inherit default)))))
 
-(provide 'prefs)
+(provide 'pref)

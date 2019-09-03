@@ -1,4 +1,4 @@
-;; File launching for frequency use
+;; file launching for frequency use
 
 (defvar file-map
   (let ((map '((("firefly") . ff)
