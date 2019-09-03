@@ -7,9 +7,7 @@
   (declare (debug (form gv-place)))
   (let ((xcar `(car ,place)) (xcdr `(cdr ,place)))
     `(if (null ,place)
-	 ,(if (symbolp place)
-	      (gv-letplace (getter setter) place
-		(funcall setter `(cons ,elt ,getter))))
+	 ,(if (symbolp place) `(setq ,place (cons ,elt nil)))
        (prog1 ,place
 	 ,(gv-letplace (_getter setter) xcdr
 	    (funcall setter `(cons ,xcar ,xcdr)))
