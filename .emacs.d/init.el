@@ -7,7 +7,7 @@
 (require 'pkglay)
 (require 'macrolv)
 (progn (require 'key-chord) (key-chord-mode t))
-(require 'layout)
+(require 'kb)
 (require 'launch)
 
 (setq custom-file (expand-file-name "pref.el" user-emacs-directory))
