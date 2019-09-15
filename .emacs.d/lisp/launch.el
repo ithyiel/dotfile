@@ -43,9 +43,8 @@
   (unless (called-interactively-p 'interactive)
     (if (nlistp alias) (error "Invalid arg type, %S" alias)))
   (let ((exec-path (cons (expand-file-name "sh"
-					     (or home-directory
-						 (getenv "HOME")))
-			   exec-path))
+					   (or home-directory (getenv "HOME")))
+			 exec-path))
 	(symbols alias) symbol)
     (while (prog1
 	       (and (setq symbol (pop symbols)) symbols)
@@ -61,10 +60,10 @@
 			(throw 'done t)))
 		 (message "No assocation matching symbol, %S" symbol)))))))
 
-(key-chord-define-global [?,?l] 'launch)
-
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (launch '(u ff dic))))
+
+(key-chord-define-global ",l" 'launch)
 
 (provide 'launch)

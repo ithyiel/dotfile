@@ -4,7 +4,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(require 'pkglay)
+(require 'pkg)
 (require 'macrolv)
 (progn (require 'key-chord) (key-chord-mode t))
 (require 'kb)

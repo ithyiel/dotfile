@@ -2,4 +2,4 @@
 
 (package-initialize)
 
-(provide 'pkglay)
+(provide 'pkg)
