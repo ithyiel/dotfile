@@ -1,4 +1,4 @@
-;; file launching for frequency use
+;;; launch.el file launching for frequency use
 
 (defvar file-map
   (let ((map '((("firefly") . ff)
@@ -67,3 +67,5 @@
 (key-chord-define-global ",l" 'launch)
 
 (provide 'launch)
+
+;;; launch.el ends here

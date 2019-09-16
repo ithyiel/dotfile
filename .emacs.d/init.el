@@ -1,4 +1,4 @@
-;; boot strap
+;;; init.el boot strap -*- lexical-binding: t -*-
 
 (setq debug-on-error t)
 
@@ -14,3 +14,5 @@
 (when (file-exists-p custom-file) (load custom-file))
 
 (provide 'init)
+
+;;; init.el ends here

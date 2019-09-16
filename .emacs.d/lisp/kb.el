@@ -1,4 +1,4 @@
-;; key binding
+;;; kb.el key binding
 ;; (read-kbd-macro SEQ)
 
 (global-set-key [f1] 'eval-last-sexp)
@@ -25,3 +25,5 @@
 (key-chord-define-global ".d" 'next-buffer)
 
 (provide 'kb)
+
+;;; kb.el ends here
