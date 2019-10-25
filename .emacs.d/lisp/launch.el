@@ -1,13 +1,16 @@
 ;;; launch.el file launching for frequency use
 
 (defvar file-map
-  (let ((map '((("firefly") . ff)
+  (let ((map `((("firefly") . ff)
 	       (("u") . u)
 	       (("stardict") . dic)
+	       (("tor" "-f" ,(expand-file-name ".tor/torrc"
+					       (or (bound-and-true-p home-directory) (getenv "HOME")))) . tor)
 	       ((ansi-term "/bin/bash") . sh)
 	       (("firefox" "-P" "origin" "--no-remote") . ww)
 	       (("firefox" "-P" "u" "--no-remote") . wwu)
-	       (("firefox" "-P" "firefly" "--no-remote") . wwf)))
+	       (("firefox" "-P" "firefly" "--no-remote") . wwf)
+	       (("firefox" "-P" "tor" "--no-remote") . wwt)))
 	(symbol-valid (lambda (arg)
 			(if (symbolp arg)
 			    (or (fboundp arg)
@@ -43,7 +46,7 @@
   (unless (called-interactively-p 'interactive)
     (if (nlistp alias) (error "Invalid arg type, %S" alias)))
   (let ((exec-path (cons (expand-file-name "sh"
-					   (or home-directory (getenv "HOME")))
+					   (or (bound-and-true-p home-directory) (getenv "HOME")))
 			 exec-path))
 	(symbols alias) symbol)
     (while (prog1
@@ -69,3 +72,4 @@
 (provide 'launch)
 
 ;;; launch.el ends here
+

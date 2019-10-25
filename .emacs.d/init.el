@@ -6,9 +6,10 @@
 
 (require 'pkg)
 (require 'macrolv)
-(progn (require 'key-chord) (key-chord-mode t))
+(progn (require 'key-chord) (key-chord-mode 1))
 (require 'kb)
 (require 'launch)
+(require 'lang)
 
 (setq custom-file (expand-file-name "pref.el" user-emacs-directory))
 (when (file-exists-p custom-file) (load custom-file))

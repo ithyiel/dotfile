@@ -13,8 +13,7 @@
       indent-tabs-mode nil)
 (setq display-time-day-and-date t
       display-time-24hr-format t
-      display-time-format "%d %m %Y %H:%M:%S"
-      display-time-interval 1)
+      display-time-format "%d %m %Y %H:%M")
 (setq user-full-name "ith yiel"
       user-mail-address "ithyiel@gmail.com")
 (setq home-directory (getenv "HOME")
@@ -26,10 +25,6 @@
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt) 
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(blink-cursor-mode t)
  '(column-number-mode t)
  '(cua-mode t nil (cua-base))
@@ -38,18 +33,14 @@
  '(display-time-mode t)
  '(fringe-mode 0 nil (fringe))
  '(menu-bar-mode nil)
- '(package-selected-packages (quote (key-chord dumb-jump)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
- '(tooltip-mode nil))
+ '(tooltip-mode nil)
+ '(package-selected-packages (quote (key-chord))))
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :slant normal :weight normal :height 113 :width normal :foundry "Mono" :family "Arial"))))
  '(fixed-pitch ((t (:inherit default))))
  '(fixed-pitch-serif ((t (:inherit default))))
